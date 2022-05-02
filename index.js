@@ -1,7 +1,8 @@
 // glocbal require's
 const inquirer = require('inquirer');
 const fs = require('fs');
-const generateMarkdown = require('./src/generateMarkdown.js')
+const generateMarkdown = require('./src/generateMarkdown.js');
+const Choices = require('inquirer/lib/objects/choices');
 
 // array of questions
 const questions = [
@@ -83,6 +84,42 @@ const questions = [
     validate: testingInput => {
         if (testingInput) {
             return true;
-        } else {console.log('you need to describe how to test this project!');}
+        } else {console.log('you need to describe how to test this project!')
+    return false;
+}
     }
-}]
+}, 
+// Github Username
+{
+    type: 'input',
+    name: 'github',
+    message: 'Enter your GitHub Username (Required)',
+    validate: githubInput => {
+        if (githubInput) {
+            return true;
+        } else {
+            console.log('Please enter your GitHub username!');
+            return false;
+        }
+    }
+},];
+//function to write README file
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data,(err) => {
+        if (err)
+        throw err;
+        console.log('success informayion transfered to readme');
+    });
+};
+
+//function to initalize app
+function init() {
+    inquirer.prompt(questions)
+    .then(function (userInput) {
+        console.log(userInput)
+        writeToFile("READ.md", generateMarkdown(userInput));
+    })
+}
+
+//call function to initalize app
+init();
