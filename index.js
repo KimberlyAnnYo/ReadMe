@@ -1,9 +1,7 @@
 // glocbal require's
 const inquirer = require('inquirer');
 const fs = require('fs');
-const generateMarkdown = require('./src/generateMarkdown.js');
-const Choices = require('inquirer/lib/objects/choices');
-
+const generateMarkdown = require('./generateMarkdown');
 // array of questions
 const questions = [
     //project Name
@@ -102,13 +100,19 @@ const questions = [
             return false;
         }
     }
-},];
+},
+{
+    type: 'list',
+    name: 'license',
+    message: 'What license should your project have?',
+   choices: ['Apache 2.0', 'IBM', 'MIT', 'None']
+}];
 //function to write README file
 function writeToFile(fileName, data) {
     fs.writeFile(fileName, data,(err) => {
         if (err)
         throw err;
-        console.log('success informayion transfered to readme');
+        console.log('success information transfered to readme');
     });
 };
 
@@ -117,7 +121,7 @@ function init() {
     inquirer.prompt(questions)
     .then(function (userInput) {
         console.log(userInput)
-        writeToFile("READ.md", generateMarkdown(userInput));
+        writeToFile("README.md", generateMarkdown(userInput));
     })
 }
 
